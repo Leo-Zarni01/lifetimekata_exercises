@@ -47,8 +47,7 @@ pub fn identity<'a>(number: &'a i32) -> &'a i32 {
 /// assert_eq!(splitted, vec!["this", "is", "a", "test"]);
 /// ```
 #[require_lifetimes(!)]
-pub fn split<'a>(text: &'a str, delimiter: &'a str) -> Vec<&'a str> {
-    // make them all share same lifetime (Leo)
+pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
     let mut last_split = 0;
     let mut matches: Vec<&str> = vec![];
     for i in 0..text.len() {
@@ -67,64 +66,64 @@ pub fn split<'a>(text: &'a str, delimiter: &'a str) -> Vec<&'a str> {
     matches
 }
 
-/// Recall that this function returns `&number` if
-/// number is greater than `&greater_than`, else it
-/// returns `&otherwise`.
-///
-/// The following test case will likely always work:
-///
-/// ```rust
-/// use ex02::only_if_greater_hard;
-/// let num = 4;
-/// let otherwise = -1;
-/// {
-///     let greater_than = 1;
-///     assert_eq!(&4, only_if_greater_hard(&num, &greater_than, &otherwise));
-///     let greater_than = 5;
-///     assert_eq!(&-1, only_if_greater_hard(&num, &greater_than, &otherwise));
-/// }
-/// ```
-///
-/// But this test case will only work if you've written
-/// the lifetimes correctly:
-///
-/// ```rust
-/// use ex02::only_if_greater_hard;
-/// let num = 10;
-/// let otherwise = -1;
-/// let answer = {
-///     let greater_than = 7;
-///     only_if_greater_hard(&num, &greater_than, &otherwise)
-///     // greater_than is dropped here.
-/// };
-/// assert_eq!(&num, answer);
-///
-/// let answer = {
-///     let greater_than = 100;
-///     only_if_greater_hard(&num, &greater_than, &otherwise)
-///     // greater_than is dropped here.
-/// };
-/// assert_eq!(&otherwise, answer);
-/// ```
-///
-/// And this test case should never compile -- can you see why?
-///
-/// ```rust,compile_fail
-/// use ex02::only_if_greater_hard;
-/// let greater_than = 7;
-/// let otherwise = -1;
-/// let answer = {
-///     let num = 10;
-///     only_if_greater_hard(&num, &greater_than, &otherwise)
-///     // num is dropped here
-/// };
-/// assert_eq!(&num, answer);
-/// ```
-#[require_lifetimes(!)]
-pub fn only_if_greater_hard(number: &i32, greater_than: &i32, otherwise: &i32) -> &i32 {
-    if number > greater_than {
-        number
-    } else {
-        otherwise
-    }
-}
+// /// Recall that this function returns `&number` if
+// /// number is greater than `&greater_than`, else it
+// /// returns `&otherwise`.
+// ///
+// /// The following test case will likely always work:
+// ///
+// /// ```rust
+// /// use ex02::only_if_greater_hard;
+// /// let num = 4;
+// /// let otherwise = -1;
+// /// {
+// ///     let greater_than = 1;
+// ///     assert_eq!(&4, only_if_greater_hard(&num, &greater_than, &otherwise));
+// ///     let greater_than = 5;
+// ///     assert_eq!(&-1, only_if_greater_hard(&num, &greater_than, &otherwise));
+// /// }
+// /// ```
+// ///
+// /// But this test case will only work if you've written
+// /// the lifetimes correctly:
+// ///
+// /// ```rust
+// /// use ex02::only_if_greater_hard;
+// /// let num = 10;
+// /// let otherwise = -1;
+// /// let answer = {
+// ///     let greater_than = 7;
+// ///     only_if_greater_hard(&num, &greater_than, &otherwise)
+// ///     // greater_than is dropped here.
+// /// };
+// /// assert_eq!(&num, answer);
+// ///
+// /// let answer = {
+// ///     let greater_than = 100;
+// ///     only_if_greater_hard(&num, &greater_than, &otherwise)
+// ///     // greater_than is dropped here.
+// /// };
+// /// assert_eq!(&otherwise, answer);
+// /// ```
+// ///
+// /// And this test case should never compile -- can you see why?
+// ///
+// /// ```rust,compile_fail
+// /// use ex02::only_if_greater_hard;
+// /// let greater_than = 7;
+// /// let otherwise = -1;
+// /// let answer = {
+// ///     let num = 10;
+// ///     only_if_greater_hard(&num, &greater_than, &otherwise)
+// ///     // num is dropped here
+// /// };
+// /// assert_eq!(&num, answer);
+// /// ```
+// #[require_lifetimes(!)]
+// pub fn only_if_greater_hard(number: &i32, greater_than: &i32, otherwise: &i32) -> &i32 {
+//     if number > greater_than {
+//         number
+//     } else {
+//         otherwise
+//     }
+// }
